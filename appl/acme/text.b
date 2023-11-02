@@ -761,6 +761,20 @@ Text.typex(t : self ref Text, r : int, echomode : int)
 				q0++;
 			t.show(q0, q0, TRUE);
 			return;
+		16r01 => # ^A
+			t.commit(TRUE);
+			if(t.q0 <= 0 || (t.readc(t.q0-1) == '\n'))
+				return;
+			nnb = t.bswidth(16r15);
+			t.show(t.q0-nnb, t.q0-nnb);
+			return;
+		16r05 => # ^E
+			t.commit(TRUE);
+			q0 = t.q1;
+			while(q0 < t.file.buf.nc && (t.readc(q0) != '\n'))
+				q0++;
+			t.show(q0, q0);
+			return;
 	}
 	if(t.what == Body){
 		seq++;
@@ -853,6 +867,41 @@ if(0)	# DEBUGGING
 		}
 		for(i=0; i<t.file.ntext; i++)
 			t.file.text[i].fill();
+		return;
+	'\n' =>
+		# FIXME:  Add the autoindent option instead of assuming it.
+		nnb = t.bswidth(16r15); # ^U case
+		rp := "";
+		rp[0] = r;
+		for(i=0; i<nnb; i++) {
+			r = t.readc(t.q0-nnb+i);
+			if(r != ' ' && r != '\t' && r != '#')
+				break;
+			rp[len rp] = r;
+		}
+
+		# FIXME:  This is part copypasta from below here, and part
+		# copypasta from Acme-SAC.  Plan 9 Acme and Acme-SAC both
+		# use rp instead of r.
+		for(i=0; i<t.file.ntext; i++){
+			u = t.file.text[i];
+			if(u.eq0 == ~0)
+				u.eq0 = t.q0;
+			if(u.ncache == 0)
+				u.cq0 = t.q0;
+			else if(t.q0 != u.cq0+u.ncache)
+				error("text.type cq1");
+			
+			u.insert(t.q0, rp, len rp, FALSE, echomode);
+			if(u != t)
+				u.setselect(u.q0, u.q1);
+			for (j:=0; j < len rp; j++)
+				u.cache[u.ncache++] = rp[j];
+		}
+		t.setselect(t.q0+len rp, t.q0+len rp);
+		if(t.w != nil)
+			t.w.commit(t);
+
 		return;
 	}
 	# otherwise ordinary character; just insert, typically in caches of all texts 
