@@ -66,7 +66,7 @@ Column.init(c : self ref Column, r : Rect)
 	r1.min.y = r1.max.y;
 	r1.max.y += Border;
 	draw(mainwin, r1, black, nil, (0, 0));
-	t.insert(0, "New Cut Paste Snarf Sort Zerox Delcol ", 38, TRUE, 0);
+	t.insert(0, "New Cut Paste Snarf Sort Zerox Delcol |a+ |a- ", 46, TRUE, 0);
 	t.setselect(t.file.buf.nc, t.file.buf.nc);
 	draw(mainwin, t.scrollr, colbutton, nil, colbutton.r.min);
 	c.safe = TRUE;
