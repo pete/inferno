@@ -1272,7 +1272,7 @@ run(win : ref Window, s : string, rdir : string, ndir : int, newns : int, argadd
 
 	if(argaddr != nil)
 		utils->setenv("acmeaddr", argaddr);
-	hard := 0;
+	hard := 1;
 	if(len s > 512-10)	# may need to print into stack 
 		hard = 1;
 	else {
