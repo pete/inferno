@@ -255,7 +255,7 @@ layout(top: ref Tk->Toplevel)
 {
 	r := top.screenr;
 	h := 32;
-	if(r.dy() < 480)
+	#if(r.dy() < 480)
 		h = tk->rect(top, ".b", Tk->Border|Tk->Required).dy();
 	cmd(top, ". configure -x " + string r.min.x +
 			" -y " + string (r.max.y - h) +
