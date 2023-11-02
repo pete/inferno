@@ -107,7 +107,7 @@ tkscrollbar(TkTop *t, char *arg, char **ret)
 
 	tk->relief = TKflat;
 	tk->borderwidth = 1;
-	tks->activer = TKraised;
+	tks->activer = TKflat;
 	tks->orient = Tkvertical;
 
 	tko[0].ptr = tk;
@@ -171,22 +171,12 @@ drawarrow(TkScroll *tks, Image *i, Point p[3], TkEnv *e, int activef, int button
 	Image *l, *d, *t;
 	int bgnd;
 
-	bgnd = TkCbackgnd;
-	if(tks->flag & (activef|buttonf)) {
-		bgnd = TkCactivebgnd;
-		fillpoly(i, p, 3, ~0, tkgc(e, bgnd), p[0]);
+	bgnd = TkCforegnd;
+	if(!(tks->flag & (activef|buttonf))) {
+		return;
 	}
 
-	l = tkgc(e, bgnd+TkLightshade);
-	d = tkgc(e, bgnd+TkDarkshade);
-	if(tks->flag & buttonf) {
-		t = d;
-		d = l;
-		l = t;
-	}
-	line(i, p[1], p[2], 0, 0, Tribw-1, d, p[1]);
-	line(i, p[2], p[0], 0, 0, Tribw-1, d, p[2]);
-	line(i, p[0], p[1], 0, 0, Tribw-1, l, p[0]);
+	fillpoly(i, p, 3, ~0, tkgc(e, bgnd), p[0]);
 }
 
 static void
@@ -196,21 +186,16 @@ drawslider(TkScroll *tks, Image *i, Point o, int w, int h, TkEnv *e)
 	Rectangle r;
 	int bgnd;
 
-	bgnd = TkCbackgnd;
-	if(tks->flag & (ActiveB1|ButtonB1)) {
-		r.min = o;
-		r.max.x = o.x + w + Elembw*2;
-		r.max.y = o.y + h + Elembw*2;
-		bgnd = TkCactivebgnd;
-		draw(i, r, tkgc(e, bgnd), nil, ZP);
-	}
+	r.min = o;
+	r.max.x = o.x + w + Elembw*2;
+	r.max.y = o.y + h + Elembw*2;
+	bgnd = TkCforegnd;
+	if(tks->flag & (ActiveB1|ButtonB1))
+		bgnd = TkCactivefgnd;
 
 	l = tkgc(e, bgnd+TkLightshade);
 	d = tkgc(e, bgnd+TkDarkshade);
-	if(tks->flag & ButtonB1)
-		tkbevel(i, o, w, h, Scrollbw, d, l);
-	else
-		tkbevel(i, o, w, h, Scrollbw, l, d);
+	draw(i, r, tkgc(e, bgnd), nil, ZP);
 }
 
 static void

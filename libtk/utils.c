@@ -851,11 +851,9 @@ tkdrawrelief(Image *i, Tk *tk, Point o, int color, int rlf)
 
 	e = tk->env;
 	if (color == TkCbackgnd || color == TkCselectbgnd || color == TkCactivebgnd) {
-		l = tkgc(e, color+TkLightshade);
-		d = tkgc(e, color+TkDarkshade);
+		l = d = tkgc(e, color+TkDarkshade);
 	} else {
-		l = tkgshade(e, color, TkLightshade);
-		d = tkgshade(e, color, TkDarkshade);
+		l = d = tkgshade(e, color, TkDarkshade);
 	}
 	bd = tk->borderwidth;
 	if(rlf < 0)
@@ -870,7 +868,7 @@ tkdrawrelief(Image *i, Tk *tk, Point o, int color, int rlf)
 		tkbevel(i, o, w, h, bd, l, d);
 		break;	
 	case TKgroove:
-		t = d;
+		/*t = d;
 		d = l;
 		l = t;
 		/* fall through */
