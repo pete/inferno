@@ -33,6 +33,7 @@ TARG=\
 	archfs.dis\
 	auplay.dis\
 	auhdr.dis\
+	base64.dis\
 	basename.dis\
 	bind.dis\
 	# bit2gif.dis\
@@ -42,6 +43,7 @@ TARG=\
 	cat.dis\
 	cd.dis\
 	cddb.dis\
+	cgiesc.dis\
 	chgrp.dis\
 	chmod.dis\
 	cleanname.dis\
